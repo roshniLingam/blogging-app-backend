@@ -3,6 +3,7 @@ package com.bloggingapp.bloggingapp.service.implementation;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,8 @@ import com.bloggingapp.bloggingapp.exception.ResourceNotFoundException;
 public class UserServiceImplementation implements UserService {
     @Autowired
     private UserRepo userRepo;
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Override
     public UserDto createUser(UserDto userDto) {
@@ -60,23 +63,27 @@ public class UserServiceImplementation implements UserService {
 
     // Private method to map UserDto to User
     private User mapToUser(UserDto userDto) {
-        return User.builder()
-        .id(userDto.getId())
-        .name(userDto.getName())
-        .email(userDto.getEmail())
-        .password(userDto.getPassword())
-        .about(userDto.getAbout())
-        .build();
+        // return User.builder()
+        // .id(userDto.getId())
+        // .name(userDto.getName())
+        // .email(userDto.getEmail())
+        // .password(userDto.getPassword())
+        // .about(userDto.getAbout())
+        // .build();
+        User user = modelMapper.map(userDto, User.class);
+        return user;
     }
 
     // Private method to map User to UserDto
     private UserDto mapToUserDto(User user) {
-        return UserDto.builder()
-        .id(user.getId())
-        .name(user.getName())
-        .email(user.getEmail())
-        .password(user.getPassword())
-        .about(user.getAbout())
-        .build();
+        // return UserDto.builder()
+        // .id(user.getId())
+        // .name(user.getName())
+        // .email(user.getEmail())
+        // .password(user.getPassword())
+        // .about(user.getAbout())
+        // .build();
+        UserDto userDto = modelMapper.map(user, UserDto.class);
+        return userDto;
     }
 }
