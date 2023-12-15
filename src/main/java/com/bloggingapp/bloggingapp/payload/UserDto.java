@@ -18,8 +18,8 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class UserDto {
-    private final String PASSWORD_PATTERN = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,15}$";
-    
+    private static final String PASSWORD_PATTERN = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,15}$";
+    private Integer userId;
     @NotEmpty
     @NotBlank
     @Size(min = 3, message = "Username must be minimum of length 3")
