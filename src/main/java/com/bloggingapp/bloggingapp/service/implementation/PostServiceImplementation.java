@@ -18,6 +18,9 @@ import com.bloggingapp.bloggingapp.repository.PostRepo;
 import com.bloggingapp.bloggingapp.repository.UserRepo;
 import com.bloggingapp.bloggingapp.service.PostService;
 
+/**
+ * Implementation class for PostService
+ */
 @Service
 public class PostServiceImplementation implements PostService {
 
@@ -45,8 +48,12 @@ public class PostServiceImplementation implements PostService {
 
     @Override
     public PostDto updatePost(PostDto postDto, Integer postId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updatePost'");
+        Post post = postRepo.findById(postId).orElseThrow(()-> new ResourceNotFoundException("Post", "Id", postId));
+        post.setTitle(postDto.getTitle());
+        post.setContent(postDto.getContent());
+        post.setImageName(postDto.getImageName());
+        Post updatedPost = postRepo.save(post);
+        return modelMapper.map(updatedPost, PostDto.class);
     }
 
     @Override
