@@ -2,6 +2,7 @@ package com.bloggingapp.bloggingapp.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bloggingapp.bloggingapp.config.Constants;
 import com.bloggingapp.bloggingapp.payload.ApiResponse;
 import com.bloggingapp.bloggingapp.payload.PostDto;
 import com.bloggingapp.bloggingapp.payload.PostResponse;
@@ -42,10 +43,10 @@ public class PostController {
     @GetMapping("/user/{userId}/posts")
     public ResponseEntity<PostResponse> getPostsByUser(
         @PathVariable("userId") Integer userId,
-        @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
-        @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize,
-        @RequestParam(value = "sortBy", defaultValue = "createDate", required = false) String sortBy,
-        @RequestParam(value = "dir", defaultValue = "desc", required = false) String dir) {
+        @RequestParam(value = "pageNumber", defaultValue = Constants.PAGE_NUMBER, required = false) Integer pageNumber,
+        @RequestParam(value = "pageSize", defaultValue = Constants.PAGE_SIZE, required = false) Integer pageSize,
+        @RequestParam(value = "sortBy", defaultValue = Constants.SORT_BY, required = false) String sortBy,
+        @RequestParam(value = "dir", defaultValue = Constants.SORT_DIR, required = false) String dir) {
         PostResponse postResponse = postService.getAllPostByUser(userId, pageNumber, pageSize, sortBy, dir);
         return new ResponseEntity<>(postResponse, HttpStatus.OK);
     }
@@ -54,10 +55,10 @@ public class PostController {
     @GetMapping("/category/{categoryId}/posts")
     public ResponseEntity<PostResponse> getPostsByCategory(
         @PathVariable("categoryId") Integer categoryId,
-        @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
-        @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize,
-        @RequestParam(value = "sortBy", defaultValue = "createDate", required = false) String sortBy,
-        @RequestParam(value = "dir", defaultValue = "desc", required = false) String dir) {
+        @RequestParam(value = "pageNumber", defaultValue = Constants.PAGE_NUMBER, required = false) Integer pageNumber,
+        @RequestParam(value = "pageSize", defaultValue = Constants.PAGE_SIZE, required = false) Integer pageSize,
+        @RequestParam(value = "sortBy", defaultValue = Constants.SORT_BY, required = false) String sortBy,
+        @RequestParam(value = "dir", defaultValue = Constants.SORT_DIR, required = false) String dir) {
         PostResponse postResponse = postService.getPostByCategory(categoryId, pageNumber, pageSize, sortBy, dir);
         return new ResponseEntity<>(postResponse, HttpStatus.OK);
     }
@@ -65,10 +66,10 @@ public class PostController {
     //GET mapping to get all post
     @GetMapping("/posts")
     public ResponseEntity<PostResponse> getAllPosts(
-        @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
-        @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize,
-        @RequestParam(value = "sortBy", defaultValue = "createDate", required = false) String sortBy,
-        @RequestParam(value = "dir", defaultValue = "desc", required = false) String dir) {
+        @RequestParam(value = "pageNumber", defaultValue = Constants.PAGE_NUMBER, required = false) Integer pageNumber,
+        @RequestParam(value = "pageSize", defaultValue = Constants.PAGE_SIZE, required = false) Integer pageSize,
+        @RequestParam(value = "sortBy", defaultValue = Constants.SORT_BY, required = false) String sortBy,
+        @RequestParam(value = "dir", defaultValue = Constants.SORT_DIR, required = false) String dir) {
         PostResponse postResponse = postService.getAllPosts(pageNumber, pageSize, sortBy, dir);
         return new ResponseEntity<>(postResponse, HttpStatus.OK);
     }
@@ -98,8 +99,8 @@ public class PostController {
     @GetMapping("/search")
     public ResponseEntity<PostResponse> searchPostByTitle(
         @RequestParam(value = "title", required = true) String keyword,
-        @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
-        @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize) {
+        @RequestParam(value = "pageNumber", defaultValue = Constants.PAGE_NUMBER, required = false) Integer pageNumber,
+        @RequestParam(value = "pageSize", defaultValue = Constants.PAGE_SIZE, required = false) Integer pageSize) {
         PostResponse posts = postService.searchPostByTitle(keyword, pageNumber, pageSize);
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
