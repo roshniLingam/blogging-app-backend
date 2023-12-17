@@ -3,6 +3,7 @@ package com.bloggingapp.bloggingapp.service;
 import java.util.List;
 
 import com.bloggingapp.bloggingapp.payload.PostDto;
+import com.bloggingapp.bloggingapp.payload.PostResponse;
 
 public interface PostService {
     // Method to create Post
@@ -12,13 +13,13 @@ public interface PostService {
     // Method to delete post
     void deletePost(Integer postId);
     // Method to get all posts
-    List<PostDto> getAllPosts();
+    PostResponse getAllPosts(Integer pageNumber, Integer pageSize, String sortBy, String dir);
     // Method to get single post
     PostDto getPostById(Integer postId);
     // Method to get post by category
-    List<PostDto> getPostByCategory(Integer categoryId);
+    PostResponse getPostByCategory(Integer categoryId, Integer pageNumber, Integer pageSize, String sortBy, String dir);
     // Method to get post by user
-    List<PostDto> getAllPostByUser(Integer userId);
+    PostResponse getAllPostByUser(Integer userId, Integer pageNumber, Integer pageSize, String sortBy, String dir);
     // Method to search post
     List<PostDto> searchPost(String keyword);
 }

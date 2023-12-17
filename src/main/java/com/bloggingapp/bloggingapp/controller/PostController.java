@@ -4,12 +4,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bloggingapp.bloggingapp.payload.ApiResponse;
 import com.bloggingapp.bloggingapp.payload.PostDto;
+import com.bloggingapp.bloggingapp.payload.PostResponse;
 import com.bloggingapp.bloggingapp.service.PostService;
 
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.RequestMapping;
-import java.util.List;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,30 +30,47 @@ public class PostController {
     private PostService postService;
     //POST mapping to create post
     @PostMapping("/user/{userId}/category/{categoryId}")
-    public ResponseEntity<PostDto> createPost(@Valid @RequestBody PostDto postDto, @PathVariable("userId") Integer userId, @PathVariable("categoryId") Integer categoryId) {
+    public ResponseEntity<PostDto> createPost(
+        @Valid @RequestBody PostDto postDto,
+        @PathVariable("userId") Integer userId, 
+        @PathVariable("categoryId") Integer categoryId) {
         PostDto post = postService.createPost(postDto, userId, categoryId);
         return new ResponseEntity<>(post, HttpStatus.CREATED);
     }
     
     //GET mapping get post by user
     @GetMapping("/user/{userId}/posts")
-    public ResponseEntity<List<PostDto>> getPostsByUser(@PathVariable("userId") Integer userId) {
-        List<PostDto> posts = postService.getAllPostByUser(userId);
-        return new ResponseEntity<>(posts, HttpStatus.OK);
+    public ResponseEntity<PostResponse> getPostsByUser(
+        @PathVariable("userId") Integer userId,
+        @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
+        @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize,
+        @RequestParam(value = "sortBy", defaultValue = "createDate", required = false) String sortBy,
+        @RequestParam(value = "dir", defaultValue = "desc", required = false) String dir) {
+        PostResponse postResponse = postService.getAllPostByUser(userId, pageNumber, pageSize, sortBy, dir);
+        return new ResponseEntity<>(postResponse, HttpStatus.OK);
     }
 
     //GET mapping to get post by category
     @GetMapping("/category/{categoryId}/posts")
-    public ResponseEntity<List<PostDto>> getPostsByCategory(@PathVariable("categoryId") Integer categoryId) {
-        List<PostDto> posts = postService.getPostByCategory(categoryId);
-        return new ResponseEntity<>(posts, HttpStatus.OK);
+    public ResponseEntity<PostResponse> getPostsByCategory(
+        @PathVariable("categoryId") Integer categoryId,
+        @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
+        @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize,
+        @RequestParam(value = "sortBy", defaultValue = "createDate", required = false) String sortBy,
+        @RequestParam(value = "dir", defaultValue = "desc", required = false) String dir) {
+        PostResponse postResponse = postService.getPostByCategory(categoryId, pageNumber, pageSize, sortBy, dir);
+        return new ResponseEntity<>(postResponse, HttpStatus.OK);
     }
 
     //GET mapping to get all post
     @GetMapping("/posts")
-    public ResponseEntity<List<PostDto>> getAllPosts() {
-        List<PostDto> posts = postService.getAllPosts();
-        return new ResponseEntity<>(posts, HttpStatus.OK);
+    public ResponseEntity<PostResponse> getAllPosts(
+        @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
+        @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize,
+        @RequestParam(value = "sortBy", defaultValue = "createDate", required = false) String sortBy,
+        @RequestParam(value = "dir", defaultValue = "desc", required = false) String dir) {
+        PostResponse postResponse = postService.getAllPosts(pageNumber, pageSize, sortBy, dir);
+        return new ResponseEntity<>(postResponse, HttpStatus.OK);
     }
 
     //GET mapping to get single post by Id
@@ -77,5 +95,4 @@ public class PostController {
     }
 
     // search post
-    
 }
