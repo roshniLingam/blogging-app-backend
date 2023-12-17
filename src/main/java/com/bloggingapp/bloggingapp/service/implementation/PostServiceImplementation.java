@@ -82,17 +82,7 @@ public class PostServiceImplementation implements PostService {
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
         Page<Post> page = postRepo.findAll(pageable);
         List<Post> posts = page.getContent();
-        List<PostDto> postsDto = posts.stream()
-                                    .map(post -> modelMapper.map(post, PostDto.class))
-                                    .collect(Collectors.toList());
-        return PostResponse.builder()
-                .posts(postsDto)
-                .pageNumber(page.getNumber())
-                .pageSize(page.getSize())
-                .totalElements(page.getTotalElements())
-                .totalPages(page.getTotalPages())
-                .lastPage(page.isLast())
-                .build();
+        return postResponseBuilder(posts, page);
     }
 
     @Override
@@ -115,17 +105,7 @@ public class PostServiceImplementation implements PostService {
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
         Page<Post> page = postRepo.findByCategory(category, pageable);
         List<Post> posts = page.getContent();
-        List<PostDto> postsDto = posts.stream()
-                                    .map(post -> modelMapper.map(post, PostDto.class))
-                                    .collect(Collectors.toList());
-        return PostResponse.builder()
-                .posts(postsDto)
-                .pageNumber(page.getNumber())
-                .pageSize(page.getSize())
-                .totalElements(page.getTotalElements())
-                .totalPages(page.getTotalPages())
-                .lastPage(page.isLast())
-                .build();
+        return postResponseBuilder(posts, page);
     }
 
     @Override
@@ -141,6 +121,24 @@ public class PostServiceImplementation implements PostService {
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
         Page<Post> page = postRepo.findByUser(user, pageable);
         List<Post> posts = page.getContent();
+        return postResponseBuilder(posts, page);
+    }
+
+    @Override
+    public PostResponse searchPostByTitle(String keyword, Integer pageNumber, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Page<Post> page = postRepo.findByTitleContaining(keyword, pageable);
+        List<Post> posts = page.getContent();
+        return postResponseBuilder(posts, page);
+    }
+
+    /**
+     * Private method to build PostResponse object
+     * @param posts
+     * @param page
+     * @return PostResponse
+     */
+    private PostResponse postResponseBuilder(List<Post> posts, Page<Post> page) {
         List<PostDto> postsDto = posts.stream()
                                     .map(post -> modelMapper.map(post, PostDto.class))
                                     .collect(Collectors.toList());
@@ -152,12 +150,5 @@ public class PostServiceImplementation implements PostService {
                 .totalPages(page.getTotalPages())
                 .lastPage(page.isLast())
                 .build();
-    }
-
-    @Override
-    public List<PostDto> searchPost(String keyword) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'searchPost'");
-    }
-    
+    } 
 }

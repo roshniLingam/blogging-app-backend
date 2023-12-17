@@ -1,7 +1,5 @@
 package com.bloggingapp.bloggingapp.service;
 
-import java.util.List;
-
 import com.bloggingapp.bloggingapp.payload.PostDto;
 import com.bloggingapp.bloggingapp.payload.PostResponse;
 
@@ -21,5 +19,5 @@ public interface PostService {
     // Method to get post by user
     PostResponse getAllPostByUser(Integer userId, Integer pageNumber, Integer pageSize, String sortBy, String dir);
     // Method to search post
-    List<PostDto> searchPost(String keyword);
+    PostResponse searchPostByTitle(String keyword, Integer pageNumber, Integer pageSize);
 }

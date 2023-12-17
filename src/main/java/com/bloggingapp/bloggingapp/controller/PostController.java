@@ -94,5 +94,13 @@ public class PostController {
         return new ResponseEntity<>(updatedPost, HttpStatus.OK);
     }
 
-    // search post
+    // GET mapping to search post by title
+    @GetMapping("/search")
+    public ResponseEntity<PostResponse> searchPostByTitle(
+        @RequestParam(value = "title", required = true) String keyword,
+        @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
+        @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize) {
+        PostResponse posts = postService.searchPostByTitle(keyword, pageNumber, pageSize);
+        return new ResponseEntity<>(posts, HttpStatus.OK);
+    }
 }
