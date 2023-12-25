@@ -5,12 +5,16 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.bloggingapp.bloggingapp.payload.ApiResponse;
+
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -29,5 +33,29 @@ public class GlobalExceptionHandler {
             errors.put(field, message);
         });
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ApiResponse> badCredentialsExceptionHandler(BadCredentialsException ex){
+        ApiResponse apiResponse = new ApiResponse(ex.getMessage(), false);
+        return new ResponseEntity<>(apiResponse, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ApiResponse> illegalArgumentExceptionHandler(IllegalArgumentException ex){
+        ApiResponse apiResponse = new ApiResponse(ex.getMessage(), false);
+        return new ResponseEntity<>(apiResponse, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<ApiResponse> expiredJwtExceptionHandler(ExpiredJwtException ex){
+        ApiResponse apiResponse = new ApiResponse(ex.getMessage(), false);
+        return new ResponseEntity<>(apiResponse, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(MalformedJwtException.class)
+    public ResponseEntity<ApiResponse> malformedJwtExceptionHandler(MalformedJwtException ex){
+        ApiResponse apiResponse = new ApiResponse(ex.getMessage(), false);
+        return new ResponseEntity<>(apiResponse, HttpStatus.UNAUTHORIZED);
     }
 }
