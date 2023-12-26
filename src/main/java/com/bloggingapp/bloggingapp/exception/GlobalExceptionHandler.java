@@ -38,24 +38,24 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ApiResponse> badCredentialsExceptionHandler(BadCredentialsException ex){
         ApiResponse apiResponse = new ApiResponse(ex.getMessage(), false);
-        return new ResponseEntity<>(apiResponse, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ApiResponse> illegalArgumentExceptionHandler(IllegalArgumentException ex){
         ApiResponse apiResponse = new ApiResponse(ex.getMessage(), false);
-        return new ResponseEntity<>(apiResponse, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ExpiredJwtException.class)
     public ResponseEntity<ApiResponse> expiredJwtExceptionHandler(ExpiredJwtException ex){
         ApiResponse apiResponse = new ApiResponse(ex.getMessage(), false);
-        return new ResponseEntity<>(apiResponse, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MalformedJwtException.class)
     public ResponseEntity<ApiResponse> malformedJwtExceptionHandler(MalformedJwtException ex){
         ApiResponse apiResponse = new ApiResponse(ex.getMessage(), false);
-        return new ResponseEntity<>(apiResponse, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
     }
 }
