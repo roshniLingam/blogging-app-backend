@@ -1,5 +1,7 @@
 package com.bloggingapp.bloggingapp.payload;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -32,6 +34,7 @@ public class UserDto {
     @NotBlank
     @Size(min = 6, max = 15, message = "Pasword length must be between 6 to 15")
     @Pattern(regexp = PASSWORD_PATTERN, message = "Password must contain atleast 1 Uppercase, 1 Lowercase, 1 Digit, 1 Special character")
+    @JsonIgnore
     private String password;
     
     private String about;

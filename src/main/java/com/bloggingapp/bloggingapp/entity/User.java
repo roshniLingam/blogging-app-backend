@@ -1,6 +1,7 @@
 package com.bloggingapp.bloggingapp.entity;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -50,7 +51,8 @@ public class User implements UserDetails{
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "user_role", joinColumns=@JoinColumn(name = "user", referencedColumnName = "id"),
     inverseJoinColumns = @JoinColumn(name = "role", referencedColumnName = "id"))
-    Set<Role> roles;
+    @Builder.Default
+    Set<Role> roles = new HashSet<>();
     
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -5,10 +5,14 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.bloggingapp.bloggingapp.config.Constants;
+import com.bloggingapp.bloggingapp.entity.Role;
 import com.bloggingapp.bloggingapp.entity.User;
 import com.bloggingapp.bloggingapp.payload.UserDto;
+import com.bloggingapp.bloggingapp.repository.RoleRepo;
 import com.bloggingapp.bloggingapp.repository.UserRepo;
 import com.bloggingapp.bloggingapp.service.UserService;
 import com.bloggingapp.bloggingapp.exception.ResourceNotFoundException;
@@ -19,6 +23,10 @@ public class UserServiceImplementation implements UserService {
     private UserRepo userRepo;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private RoleRepo roleRepo;
 
     @Override
     public UserDto createUser(UserDto userDto) {
@@ -61,29 +69,27 @@ public class UserServiceImplementation implements UserService {
         userRepo.delete(user);
     }
 
+    @Override
+    public UserDto registerUser(UserDto userDto) {
+        User user = mapToUser(userDto);
+        // Encode password
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        // Fetch role Id for non-admin role
+        Role role = roleRepo.findById(Constants.NORMAL_USER).get();
+        user.getRoles().add(role);
+        User registeredUser = userRepo.save(user);
+        return mapToUserDto(registeredUser);
+    }
+
     // Private method to map UserDto to User
     private User mapToUser(UserDto userDto) {
-        // return User.builder()
-        // .id(userDto.getId())
-        // .name(userDto.getName())
-        // .email(userDto.getEmail())
-        // .password(userDto.getPassword())
-        // .about(userDto.getAbout())
-        // .build();
         User user = modelMapper.map(userDto, User.class);
         return user;
     }
 
     // Private method to map User to UserDto
     private UserDto mapToUserDto(User user) {
-        // return UserDto.builder()
-        // .id(user.getId())
-        // .name(user.getName())
-        // .email(user.getEmail())
-        // .password(user.getPassword())
-        // .about(user.getAbout())
-        // .build();
         UserDto userDto = modelMapper.map(user, UserDto.class);
         return userDto;
-    }
+    }   
 }
