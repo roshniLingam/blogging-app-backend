@@ -44,6 +44,4 @@ public class BloggingappApplication implements CommandLineRunner{
 			e.printStackTrace();
 		}
 	}
-	
-	
 }

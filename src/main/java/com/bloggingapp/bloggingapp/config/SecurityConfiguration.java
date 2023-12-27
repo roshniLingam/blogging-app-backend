@@ -14,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.bloggingapp.bloggingapp.security.JwtAuthenticationEntryPoint;
 import com.bloggingapp.bloggingapp.security.JwtAuthenticationFilter;
@@ -23,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+@EnableWebMvc
 public class SecurityConfiguration {
 
     @Autowired
@@ -32,12 +34,25 @@ public class SecurityConfiguration {
     @Autowired
     AuthenticationManager authenticationManager;
 
+    private static final String[] WHITELIST_URLS = {
+        "/api/v1/auth/**",
+        "/swagger-resources",
+        "/swagger-resources/**",
+        "/configuration/ui",
+        "/configuration/security",
+        "/swagger-ui.html",
+        "/webjars/**",
+        "/v3/api-docs/**",
+        "/api-docs/**",
+        "/swagger-ui/**"
+    };
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/api/v1/auth/**").permitAll();
+                    auth.requestMatchers(WHITELIST_URLS).permitAll();
                     auth.requestMatchers(HttpMethod.GET).permitAll();
                     auth.anyRequest().authenticated();
                 })
