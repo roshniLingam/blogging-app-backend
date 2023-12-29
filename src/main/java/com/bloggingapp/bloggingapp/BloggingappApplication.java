@@ -36,8 +36,8 @@ public class BloggingappApplication implements CommandLineRunner{
 	@Override
 	public void run(String... args) throws Exception {
 		try{
-			Role adminRole = new Role(Constants.ADMIN_USER, "ADMIN_USER");
-			Role normalRole = new Role(Constants.NORMAL_USER, "NORMAL_USER");
+			Role adminRole = new Role(Constants.ADMIN_USER, "ROLE_ADMIN");
+			Role normalRole = new Role(Constants.NORMAL_USER, "ROLE_NORMAL");
 			List<Role> roles = List.of(adminRole, normalRole);
 			roleRepo.saveAll(roles);
 		}catch(Exception e){
